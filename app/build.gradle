@@ -9,6 +9,7 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
+    id 'java'
 }
 
 repositories {
@@ -29,7 +30,24 @@ application {
     mainClass = 'fileferry.App'
 }
 
+jar {
+    manifest{
+        attributes(
+                "Main-Class": "FileMover",
+                "Class-Path": configurations.compileClasspath.files.collect { it.getName() }.join(' ')
+        )
+    }
+}
+
+task copyFile(type: Copy){
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from configurations.compileClasspath
+    into "$buildDir/libs"
+}
+
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
 }
+
+build.finalizedBy copyFile
