@@ -1,3 +1,2 @@
-/path/to/your/textfile.txt
-/path/to/your/hogehoge.txt
-/path/to/your/example.txt
+/Users/jin/hobby
+/Users/jin/AP

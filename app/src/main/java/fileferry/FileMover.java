@@ -63,7 +63,7 @@ public class FileMover {
             }
             try {
                 Files.move(file, targetDirectory.resolve(file.getFileName()));
-            } catch (FileAlreadyExistsException e) {
+                JOptionPane.showMessageDialog(null, "ファイルの移動が完了しました. 「 " + file.getFileName() + " 」 ->" + targetDirectory.resolve(file.getFileName()));            } catch (FileAlreadyExistsException e) {
                 JOptionPane.showMessageDialog(null, "保存先ディレクトリに同じ名前のファイルが既に存在します: " + e.getMessage());
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, "An error occurred while moving the file: " + e.getMessage());
