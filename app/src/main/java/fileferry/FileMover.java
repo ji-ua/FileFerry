@@ -3,6 +3,8 @@ import java.nio.file.*;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.nio.file.Paths;
+import java.awt.List;
 import java.util.ArrayList;
 
 public class FileMover {
@@ -13,6 +15,7 @@ public class FileMover {
     public FileMover() throws IOException {
         watchService = FileSystems.getDefault().newWatchService();
         downloadDir.register(watchService, StandardWatchEventKinds.ENTRY_CREATE);
+        presetPaths = readPresetPathList();
     }
 
     public void startListening() {
@@ -49,7 +52,7 @@ public class FileMover {
                     options.get(0));
 
             Path targetDirectory;
-            if (n < options.size()) {
+            if (n < options.size()-1) {
                 targetDirectory = presetPaths.get(n);
             } else {
                 JFileChooser fileChooser = new JFileChooser();
@@ -67,6 +70,22 @@ public class FileMover {
                 e.printStackTrace();
             }
         });
+    }
+
+    public ArrayList<Path> readPresetPathList() {
+        ArrayList<Path> paths = new ArrayList<>();
+        try (InputStream is = FileMover.class.getResourceAsStream("/paths.txt");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is))){
+            String line;
+            while((line = reader.readLine()) != null) {
+                paths.add(Paths.get(line));
+            }          
+            
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return paths;
     }
 
     public static void main(String[] args) {
