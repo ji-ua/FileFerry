@@ -42,8 +42,10 @@ public class FileMover {
             }
             options.add(String.valueOf("その他"));
 
+            String fileName = file.getFileName().toString();
+
             Integer n = JOptionPane.showOptionDialog(null,
-                    "ファイルの移動先のディレクトリを選択してください",
+                    "「 " + fileName + "」 の移動先のディレクトリを選択してください",
                     "ファイルの移動",
                     JOptionPane.YES_NO_CANCEL_OPTION,
                     JOptionPane.QUESTION_MESSAGE,
