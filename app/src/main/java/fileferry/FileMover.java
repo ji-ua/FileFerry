@@ -38,7 +38,7 @@ public class FileMover {
         SwingUtilities.invokeLater(() -> {
             ArrayList<Object> options = new ArrayList<>();
             for (Path aPath : presetPaths) {
-                options.add(String.valueOf(aPath));
+                options.add(String.valueOf(aPath.getFileName()));
             }
             options.add(String.valueOf("その他"));
 
