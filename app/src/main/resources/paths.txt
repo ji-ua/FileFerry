@@ -1,2 +1,2 @@
-/Users/jin/hobby
-/Users/jin/AP
+/example/hoge.txt
+/example/ho.txt
