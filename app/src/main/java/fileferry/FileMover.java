@@ -3,10 +3,12 @@ import java.nio.file.*;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.util.ArrayList;
 
 public class FileMover {
     private Path downloadDir = Paths.get(System.getProperty("user.home"), "Downloads");
     private WatchService watchService;
+    private ArrayList<Path> presetPaths;
 
     public FileMover() throws IOException {
         watchService = FileSystems.getDefault().newWatchService();
@@ -31,25 +33,38 @@ public class FileMover {
 
     public void moveFile(Path file) {
         SwingUtilities.invokeLater(() -> {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setDialogTitle("Select directory to move file to");
-            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            int userSelection = fileChooser.showSaveDialog(null);
+            ArrayList<Object> options = new ArrayList<>();
+            for (Path aPath : presetPaths) {
+                options.add(String.valueOf(aPath));
+            }
+            options.add(String.valueOf("その他"));
 
-            if (userSelection == JFileChooser.APPROVE_OPTION) {
-                Path targetDirectory = fileChooser.getSelectedFile().toPath();
-                Path targetPath = targetDirectory.resolve(file.getFileName());
-                try {
-                    if (Files.exists(targetPath)) {
-                        throw new FileAlreadyExistsException(targetPath.toString());
-                    }
-                    Files.move(file, targetPath);
-                } catch (FileAlreadyExistsException e) {
-                    JOptionPane.showMessageDialog(null, "File already exists in the destination directory: " + e.getMessage());
-                } catch (IOException e) {
-                    JOptionPane.showMessageDialog(null, "An error occurred while moving the file: " + e.getMessage());
-                    e.printStackTrace();
-                }
+            Integer n = JOptionPane.showOptionDialog(null,
+                    "ファイルの移動先のディレクトリを選択してください",
+                    "ファイルの移動",
+                    JOptionPane.YES_NO_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options.toArray(),
+                    options.get(0));
+
+            Path targetDirectory;
+            if (n < options.size()) {
+                targetDirectory = presetPaths.get(n);
+            } else {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                int userSelection = fileChooser.showSaveDialog(null);
+                if (userSelection != JFileChooser.APPROVE_OPTION) return;
+                targetDirectory = fileChooser.getSelectedFile().toPath();
+            }
+            try {
+                Files.move(file, targetDirectory.resolve(file.getFileName()));
+            } catch (FileAlreadyExistsException e) {
+                JOptionPane.showMessageDialog(null, "保存先ディレクトリに同じ名前のファイルが既に存在します: " + e.getMessage());
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "An error occurred while moving the file: " + e.getMessage());
+                e.printStackTrace();
             }
         });
     }
