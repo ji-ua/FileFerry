@@ -17,10 +17,7 @@ $ java -jar app/build/libs/app.jar
 
 ### "paths.txt" example
 
-``
+```
 /example/hoge
-``
-  
-``
 /example/ho
-``
+```
