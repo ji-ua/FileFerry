@@ -1,2 +1,3 @@
-/example/hoge.txt
-/example/ho.txt
+/path/to/default/directory/one
+/path/to/default/directory/two
+...
