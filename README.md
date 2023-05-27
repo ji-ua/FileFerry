@@ -7,10 +7,10 @@ A tool that monitors download folders and semi-automatically distributes downloa
 
 ## Usage
 
-``
+```
 $ gradle build
 $ java -jar app/build/libs/app.jar
-``
+```
 
 デフォルトでディレクトリを設定します。`FileFerry/app/src/main/resources/paths.txt`を書き換えてください。  
 複数のディレクトリを設定する場合は、ディレクトリごとに改行してください。
